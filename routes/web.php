@@ -11,7 +11,8 @@
 |
 */
 
-use Illuminate\Support\Facades\Request;
+use App\Events\Message;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +33,16 @@ Route::post('/ping', function (Request $request) {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+// Pusher
+Route::get('/pusher', function () {
+   return view('index');
+});
+
+Route::post('/send-message', function (Request $request) {
+    event(new Message($request->input('username'), $request->input('message')));
+    return ["success" => true];
+});
 
 /*Route::get('/noti', function () {
     broadcast(new \App\Events\UserEvent());
